@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffe7f0">
+<title>for you — dành cho Cừn</title>
+<style>
+  :root { --pink:#ff78a8; --deep:#ed4f8c; --soft:#fff0f5; --ink:#754458; }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; min-height:100vh; overflow:hidden; display:grid; place-items:center;
+    font-family: ui-rounded, "Arial Rounded MT Bold", system-ui, sans-serif;
+    color:var(--ink);
+    background:radial-gradient(circle at 20% 15%, #fff 0 5%, transparent 28%),
+               linear-gradient(135deg,#ffeaf2,#fff5f8 48%,#ffe0ec);
+  }
+  .sparkle { position:fixed; inset:0; pointer-events:none; overflow:hidden; }
+  .heart { position:absolute; bottom:-40px; color:#ff8eb5; opacity:.65; animation:float 9s linear infinite; }
+  @keyframes float { from{transform:translateY(0) rotate(0);opacity:0} 12%{opacity:.7} to{transform:translateY(-115vh) rotate(35deg);opacity:0} }
+  .card {
+    width:min(92vw,440px); padding:34px 22px 30px; text-align:center; position:relative;
+    border:2px solid #fff; border-radius:30px; background:rgba(255,255,255,.78);
+    box-shadow:0 18px 55px rgba(222,102,145,.18); backdrop-filter:blur(12px);
+  }
+  .tag { display:inline-block; padding:7px 14px; border-radius:999px; background:#fff0f5; color:#e76b98; font-size:12px; letter-spacing:1.8px; font-weight:800; }
+  h1 { font-size:clamp(25px,7vw,32px); line-height:1.25; margin:20px 0 9px; color:#d94e83; }
+  .sub { font-size:14px; line-height:1.6; color:#a77a8c; margin:0 auto 16px; }
+  .gif { width:170px; height:150px; object-fit:contain; margin:2px auto 12px; display:block; border-radius:18px; }
+  .buttons { height:66px; display:flex; align-items:center; justify-content:center; gap:18px; position:relative; margin-top:10px; }
+  button { border:0; border-radius:999px; padding:13px 21px; font-size:15px; font-weight:800; cursor:pointer; box-shadow:0 7px 16px rgba(212,91,137,.17); transition:transform .2s, box-shadow .2s; white-space:nowrap; }
+  button:active { transform:scale(.94); }
+  #no { color:#a34f70; background:#ffe3ed; }
+  #yes { color:white; background:linear-gradient(135deg,#ff8db5,#ef5b95); position:relative; z-index:3; }
+  #yes:hover { box-shadow:0 9px 24px rgba(239,91,149,.35); }
+  .hint { font-size:11px; color:#c18da2; margin-top:20px; }
+  .result { display:none; animation:pop .45s cubic-bezier(.2,1.5,.5,1); }
+  @keyframes pop { from{transform:scale(.65);opacity:0} to{transform:scale(1);opacity:1} }
+  .result h2 { color:#df548b; font-size:27px; margin:12px 0; }
+  .result p { line-height:1.7; }
+  .sad { display:none; animation:pop .35s ease-out; }
+  .sad .face { font-size:65px; margin:10px; }
+  .sad h2 { color:#8794ad; }
+  .sad p { color:#8490a5; line-height:1.7; }
+  .again { background:#e8edf7; color:#65728d; margin-top:8px; }
+  .footer { font-size:11px; opacity:.6; margin-top:23px; }
+  @media(max-width:380px) { .card{padding:27px 15px} button{padding:12px 17px;font-size:14px} .gif{height:130px} }
+</style>
+</head>
+<body>
+<div class="sparkle" id="sparkle"></div>
+<main class="card">
+  <section id="question">
+    <span class="tag">A LITTLE NOTE FOR YOU ♡</span>
+    <h1>Anh còn iu em nữaaa hongg? 👉👈</h1>
+    <p class="sub">dành cho Cừn · một câu hỏi nhỏ xíu thuiii</p>
+    <img class="gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd3F0Z3Z3cGJ2N2N3a2F0d3F0Z3Z3cGJ2N2N3a2F0d3F0Z3Z3/MDJ9IbxxvDUQM/giphy.gif" alt="Cute animated bear">
+    <p class="sub">Nếu anh không chọn hoặc thoát là anhh ghét emm 🥺</p>
+    <div class="buttons" id="buttons">
+      <button id="no" type="button">Không iu emm 😠</button>
+      <button id="yes" type="button">Có iuu em 😽</button>
+    </div>
+    <p class="hint">psst… thử chọn một đáp án đi nè 💗</p>
+  </section>
+  <section class="result" id="happy">
+    <div style="font-size:66px">💗🥰💗</div>
+    <h2>Biết ngay màaaa!</h2>
+    <p>Cừn được iu nhiều thiệt nhiều luôn đóoo!<br>Gửi Cừn một chiếc ôm thật nhiều tim ♡</p>
+    <div style="font-size:28px">💕 💞 💖</div>
+  </section>
+  <section class="sad" id="sad">
+    <div class="face">🥺💧</div>
+    <h2>Huhu… buồn xỉu luôn</h2>
+    <p>Anh chắc chưa đóoo?<br>Em sẽ ngồi đây buồn một chút á…</p>
+    <button class="again" id="again" type="button">Cho em chọn lại nha? 🥹</button>
+  </section>
+  <div class="footer">made with ♡ · for you</div>
+</main>
+<script>
+  const sparkle = document.getElementById('sparkle');
+  const symbols = ['♡','♥','✧','୨୧'];
+  for(let i=0;i<22;i++){
+    const s=document.createElement('span'); s.className='heart';
+    s.textContent=symbols[Math.floor(Math.random()*symbols.length)];
+    s.style.left=Math.random()*100+'%';
+    s.style.animationDelay=(Math.random()*9)+'s';
+    s.style.animationDuration=(7+Math.random()*7)+'s';
+    s.style.fontSize=(13+Math.random()*20)+'px';
+    sparkle.appendChild(s);
+  }
+  const yes=document.getElementById('yes'), no=document.getElementById('no');
+  const buttons=document.getElementById('buttons');
+  function dodge(){
+    const area=buttons.getBoundingClientRect();
+    const maxX=Math.max(0, area.width-yes.offsetWidth);
+    const maxY=30;
+    yes.style.position='absolute';
+    yes.style.left=(Math.random()*maxX)+'px';
+    yes.style.top=((Math.random()*maxY)-maxY/2)+'px';
+  }
+  yes.addEventListener('pointerenter',dodge);
+  yes.addEventListener('touchstart',(e)=>{ e.preventDefault(); dodge(); },{passive:false});
+  yes.addEventListener('click',()=>{
+    document.getElementById('question').style.display='none';
+    document.getElementById('happy').style.display='block';
+  });
+  no.addEventListener('click',()=>{
+    document.getElementById('question').style.display='none';
+    document.getElementById('sad').style.display='block';
+  });
+  document.getElementById('again').addEventListener('click',()=>{
+    document.getElementById('sad').style.display='none';
+    document.getElementById('question').style.display='block';
+    yes.style.position='relative'; yes.style.left=''; yes.style.top='';
+  });
+</script>
+</body>
+</html>
